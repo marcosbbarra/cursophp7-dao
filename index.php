@@ -19,7 +19,21 @@
 
 	// login
 	$usuario =  new Usuario();
-	$usuario->login("nome 2","321");
+	$usuario->login("root","teste");
 	echo "RETORNA LOGIN: " . $usuario;
-	echo PHP_EOL."============".PHP_EOL;		
+	echo PHP_EOL."============".PHP_EOL;	
+
+	// insert
+	$aluno =  new Usuario("aluno 2","444333");
+	$aluno->insert();
+	echo $aluno;
+	echo PHP_EOL."============".PHP_EOL;	
+
+	// update
+	$usuario_up =  new Usuario();
+	$usuario_up->loadById(9);
+	$usuario_up->update('professor','&*2334%');
+	echo $usuario_up;
+	echo PHP_EOL."============".PHP_EOL;	
+
 ?>

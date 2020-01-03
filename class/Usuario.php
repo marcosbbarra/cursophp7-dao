@@ -39,23 +39,10 @@
 				":ID"=>$id
 			));
 			if (count($result)>0){
-				$row = $result[0];
-				$this->setIdusuario($row['idusuario']);
-				$this->setDeslogin($row['deslogin']);
-				$this->setDessenha($row['dessenha']);
-				$this->setDtcadastro($row['dtcadastro']);
-
+				$this->setData($result[0]);
 			}
 		}
 
-		public function __toString(){
-			return json_encode(array(
-					"idusuario"=>$this->getIdusuario(),
-					"deslogin"=>$this->getDeslogin(),
-					"dessenha"=>$this->getDessenha(),
-					"dtcadastro"=>$this->getDtcadastro()
-			));
-		}
 
 		public static function getList(){
 			$sql = new Sql();
@@ -77,14 +64,55 @@
 			));
 
 			if (count($result)>0){
-				$row = $result[0];
-				$this->setIdusuario($row['idusuario']);
-				$this->setDeslogin($row['deslogin']);
-				$this->setDessenha($row['dessenha']);
-				$this->setDtcadastro($row['dtcadastro']);
+				$this->setData($result[0]);
 			} else {
 				throw new Exception("Login e senha errados!");
 			}
+		}
+
+		public function setData($data){
+				$this->setIdusuario($data['idusuario']);
+				$this->setDeslogin($data['deslogin']);
+				$this->setDessenha($data['dessenha']);
+				$this->setDtcadastro($data['dtcadastro']);
+		}
+
+		public function insert(){
+			$sql = new Sql();
+			$result = $sql->select("CALL sp_usuarios_insert(:LOGIN, :PASSWORD)", ARRAY(
+				':LOGIN'=>$this->getDeslogin(),
+				':PASSWORD'=>$this->getDessenha()
+			));
+
+			if (count($result) > 0){
+				$this->setData($result[0]);
+			}
+		}
+
+		public function __construct($Login = "", $Password = ""){
+			$this->setdeslogin($Login);
+			$this->setDessenha($Password);
+		}
+
+		public function __toString(){
+			return json_encode(array(
+					"idusuario"=>$this->getIdusuario(),
+					"deslogin"=>$this->getDeslogin(),
+					"dessenha"=>$this->getDessenha(),
+					"dtcadastro"=>$this->getDtcadastro()
+			));
+		}
+
+		public function update($login, $pass){
+			$this->setDeslogin($login);
+			$this->setDessenha($pass);
+
+			$sql = new Sql();
+			$sql->query("update tb_usuarios set deslogin = :LOGIN, dessenha = :PASS where idusuario = :ID", array(
+				':LOGIN'=>$this->getDeslogin(),
+				':PASS'=>$this->getDessenha(),
+				':ID'=>$this->getIdusuario()
+			));
 		}
 
 	}
