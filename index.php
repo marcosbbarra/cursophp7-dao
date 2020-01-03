@@ -36,4 +36,11 @@
 	echo $usuario_up;
 	echo PHP_EOL."============".PHP_EOL;	
 
+	// update
+	$usuario_del =  new Usuario();
+	$usuario_del->loadById(8);
+	$usuario_del->delete();
+	echo $usuario_del;
+	echo PHP_EOL."============".PHP_EOL;
+
 ?>
